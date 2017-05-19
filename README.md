@@ -1,3 +1,4 @@
-# My Awesome Book
+# TritanDb
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+A time-series database for Internet of Things data and analytics.
+
