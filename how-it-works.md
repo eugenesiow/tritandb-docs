@@ -14,6 +14,8 @@ The majority IoT time-series data is flat, wide, numerical and either approximat
 
 ## Quantum Re-ordering Buffer \(QRB\)
 
+Time-series data for the IoT is immutable. However, sensor networks offer only best-effort delivery and hence data might arrive at TritanDB out-of-order. The Quantum Re-ordering Buffer \(QRB\) mitigates out-of-order delivery within a period of time called a quantum. No matter how bad the connections are, as long as the quantum is longer than the worst case delivery, TritanDB has no problem processing the data.
+
 ## Tritan Tables \(TrTables\)
 
 ## Time-series Compression
