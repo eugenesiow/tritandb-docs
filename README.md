@@ -1,6 +1,6 @@
 # TritanDB
 
-**TritanDb **\([tritandb.com](https://www.gitbook.com/book/eugenesiow/tritandb/edit#)\)** **is a time-series database for Internet of Things \(IoT\) data and analytics with a rich graph data model and a fast lightweight core. It can be used to ingest, store and query time-series data in real-time. TRITAnDb stands for Time-series Rapid Internet of Things Analytics Database. 
+**TritanDb **\([tritandb.com](https://www.gitbook.com/book/eugenesiow/tritandb/edit#)\)** **is a time-series database for Internet of Things \(IoT\) data and analytics with a rich graph data model and a fast lightweight core. It can be used to ingest, store and query time-series data in real-time. TRITAnDb stands for Time-series Rapid Internet of Things Analytics Database.
 
 ## Features
 
@@ -9,10 +9,12 @@
 * Fast data ingestion utilising a ring buffer.
 * Event sourcing to support journaling.
 * Accepts out-of-order events.
-* Rich graph data model like RDF are supported.
+* Rich graph data models like RDF are supported to encourage semantic interoperability.
 * Powerful graph query engine with support for SPARQL.
 * Optimised for Fog Computing across lightweight Things as well as cloud servers.
 * Written in Kotlin and runs on the JVM.
 
+## Getting Started
 
+TritanDB is available from Github \([https://github.com/eugenesiow/tritandb-kt](https://github.com/eugenesiow/tritandb-kt)\).
 
