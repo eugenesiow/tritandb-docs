@@ -18,9 +18,15 @@ Time-series data for the IoT is immutable. However, sensor networks offer only b
 
 ## Tritan Tables \(TrTables\)
 
+Tritan Tables \(TrTables\) are a novel data structured for time-series storage inspired by Google's work on BigTable and Sorted String Tables \(SSTables\). Many big data systems like Apache Cassandra and HBase use SSTables organised as a Log Structured Merge Tree \(LSM-tree\) for key-value storage. A continuous compaction process helps manage these SSTables in terms of size and traversal performance. TrTables, however, do away with this background compaction process and LSM-tree design which adds unnecessary complication and can be expensive. Instead, TrTables, together with the QRB and a memtable in between, are designed as flat storage, which performs the fastest as it matches the physical design of modern storage. The interface to retrieve anything is physically one-dimensional, you provide an offset and you access a block of storage, hence, the flat TrTable, with a flat index, flat QRB and flat memtable works best and fastest.
+
 ## Time-series Compression
+
+Time-series can often be compressed very effectively. The difference between timestamps, the delta, is much smaller than the actual timestamp. Values from sensors are unlikely to fluctuate to greatly all the time. Hence, by compressing timestamps and values with reference to the previous sequence of values is advantageous because it is faster to compress and decompress a smaller chunk than to store and retrieve a bigger uncompressed chunk.
+
+State-of-the-art timestamp and value compression is performed in TritanDB for time-partitioned blocks. Timestamps are compressed using Facebook's Gorilla delta-delta compression algorithm for high precision timestamps and Adaptive Delta-Run-Length-Encoded Rice Encoding for low precision timestamps. Values are encoded using the best-of-class FPC floating point compression algorithm.
 
 ## SPARQL Queries on S2SML Mappings
 
-
+SPARQL is a powerful query language for RDF graphs which is similar in terms of syntax to SQL but allows the querying of subgraph patterns. Time-series data is stored in the most compact and concise means with TrTables while metadata and other graph structures and relations are stored in an in-memory graph model represented in RDF with S2SML.
 
