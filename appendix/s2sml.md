@@ -1,5 +1,7 @@
 # S2SML
 
+<!-- toc -->
+
 ## Description
 
 S2SML is a mapping language for mapping time-series data in TritanDB to graph model Linked Data. The creation of an S2SML mapping allows the execution of a SPARQL graph query on underlying time-series data. The language is compatible with R2RML \(can be translated to and from\) but provides the ability to
