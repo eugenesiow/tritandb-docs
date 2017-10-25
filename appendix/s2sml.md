@@ -1,3 +1,5 @@
+# S2SML
+
 ## Description
 
 S2SML is a mapping language for mapping time-series data in TritanDB to graph model Linked Data. The creation of an S2SML mapping allows the execution of a SPARQL graph query on underlying time-series data. The language is compatible with R2RML \(can be translated to and from\) but provides the ability to
@@ -66,7 +68,7 @@ A IRI map node is a unicode string made up of multiple components, these compone
 
 * Pairs of unescaped curly braces must enclose valid logical table names and column names separated by a dot.
 * Curly braces that do not enclose column names must be escaped by a backslash character \(“\”\). This also applies to curly braces within column names.
-* Backslash characters \(“\”\) must be escaped by preceding them with another backslash character, yielding “\\”. This also applies to backslashes within column names.
+* Backslash characters \(“\”\) must be escaped by preceding them with another backslash character, yielding “\”. This also applies to backslashes within column names.
 * There should be at least one pair of unescaped curly braces e.g. the cardinality of the set of reference bindings should be more than or equals to 1.
 
 An example is:
@@ -101,20 +103,20 @@ This is a sample S2SML mapping:
 
 ```
 _:1a <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/NET/iot#WeatherObservation>.
-	_:1a <http://purl.oclc.org/NET/ssnx/ssn#observationResult> _:1c.
-	_:1a <http://purl.oclc.org/NET/ssnx/ssn#observationSamplingTime> _:1b.
+    _:1a <http://purl.oclc.org/NET/ssnx/ssn#observationResult> _:1c.
+    _:1a <http://purl.oclc.org/NET/ssnx/ssn#observationSamplingTime> _:1b.
 
-	_:1a <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://iot.soton.ac.uk/smarthome/sensor#environmental1>.
+    _:1a <http://purl.oclc.org/NET/ssnx/ssn#observedBy> <http://iot.soton.ac.uk/smarthome/sensor#environmental1>.
 _:1b <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2006/time#Instant>.
-	_:1b <http://www.w3.org/2006/time#inXSDDateTime> "environment.TimestampUTC".
+    _:1b <http://www.w3.org/2006/time#inXSDDateTime> "environment.TimestampUTC".
 _:1c <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/NET/iot#WeatherSensorOutput>.
-	_:1c <http://purl.oclc.org/NET/ssnx/ssn#hasValue> _:1d.
-	_:1c <http://purl.oclc.org/NET/ssnx/ssn#hasValue> _:1e.
-	_:1c <http://purl.oclc.org/NET/ssnx/ssn#isProducedBy> <http://iot.soton.ac.uk/smarthome/sensor#environmental1>.
+    _:1c <http://purl.oclc.org/NET/ssnx/ssn#hasValue> _:1d.
+    _:1c <http://purl.oclc.org/NET/ssnx/ssn#hasValue> _:1e.
+    _:1c <http://purl.oclc.org/NET/ssnx/ssn#isProducedBy> <http://iot.soton.ac.uk/smarthome/sensor#environmental1>.
 _:1d <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/NET/iot#InternalTemperatureValue>.
-	_:1d <http://purl.oclc.org/NET/iot#hasQuantityValue> "environment.insideTemp".
+    _:1d <http://purl.oclc.org/NET/iot#hasQuantityValue> "environment.insideTemp".
 _:1e <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.oclc.org/NET/iot#ExternalTemperatureValue>.
-	_:1e <http://purl.oclc.org/NET/iot#hasQuantityValue> "environment.outsideTemp".
+    _:1e <http://purl.oclc.org/NET/iot#hasQuantityValue> "environment.outsideTemp".
 ```
 
 [![](https://cloud.githubusercontent.com/assets/9078335/14705403/35dd9ff2-07b1-11e6-9779-2e18483965ba.png)](https://cloud.githubusercontent.com/assets/9078335/14705403/35dd9ff2-07b1-11e6-9779-2e18483965ba.png)
