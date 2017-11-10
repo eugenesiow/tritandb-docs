@@ -24,9 +24,15 @@ Tritan Tables \(TrTables\) are a novel data structured for time-series storage i
 
 ## Time-series Compression
 
-Time-series can often be compressed very effectively. The difference between timestamps, the delta, is much smaller than the actual timestamp. Values from sensors are unlikely to fluctuate to greatly all the time. Hence, by compressing timestamps and values with reference to the previous sequence of values is advantageous because it is faster to compress and decompress a smaller chunk than to store and retrieve a bigger uncompressed chunk.
+Time-series can often be compressed very effectively. The difference between timestamps, the delta, is much smaller than the actual timestamp. Values from sensors are unlikely to fluctuate greatly all the time. Hence, by compressing timestamps and values with reference to the previous sequence of values is advantageous because it is faster to compress and decompress (in terms of disk and memory input-output) a smaller chunk than to store and retrieve a bigger uncompressed chunk (and the pace and improvement of CPU speeds have outstripped that of memory and disk latency).
 
-State-of-the-art timestamp and value compression is performed in TritanDB for time-partitioned blocks. Timestamps are compressed using Facebook's Gorilla delta-delta compression algorithm for high precision timestamps and Adaptive Delta-Run-Length-Encoded Rice Encoding for low precision timestamps. Values are encoded using the best-of-class FPC floating point compression algorithm.
+State-of-the-art timestamp and value compression is performed in TritanDB for time-partitioned blocks. Timestamps are compressed using Facebook's Gorilla delta-delta compression algorithm for high precision timestamps and Adaptive Delta-Run-Length-Encoded Rice Encoding for low precision timestamps. Values are encoded using the Gorilla value compression algorithm, which improves on the best-of-class FPC floating point compression algorithm, when divided into 64KB blocks (empirically proven in experiments). This also utilises the block boundaries on disk for fast read performance.
+
+### Where precision matters - Timestamp Compression
+
+TritanDB utilises the best algorithms for different precisions of timestamps. Timestamps with precision up to seconds are more efficiently encoded with our adaptive Delta-RLE-Rice algorithm while timestamps with higher precisions than seconds are encoded better with the Delta-of-Delta algorithm.
+
+![](/assets/docs_tritandb_timeseries - Page 1.png)
 
 ## SPARQL Queries on S2SML Mappings
 
