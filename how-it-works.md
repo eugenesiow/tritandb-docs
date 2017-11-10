@@ -16,7 +16,7 @@ Time-series data for the IoT is immutable. However, sensor networks offer only b
 
 ![](/assets/qrb - Page 1.png)
 
-For example, if a quantum, _q_, of 6 is defined, once 6 rows of the time-series are inserted into the QRB, a quantum expiry occurs and an insertion sort is performed on the content of the QRB, by timestamp. The insertion sort is efficient as the QRB is already partially-ordered (think slightly out-of-ordered). A portion of the QRB determined by a flush coefficient, _a_, is flushed from the QRB. The flush coefficient ,0 <_a_<1, is 
+For example, if a quantum, _q_, of 6 is defined, once 6 rows of the time-series are inserted into the QRB, a quantum expiry occurs and an insertion sort is performed on the content of the QRB, by timestamp. The insertion sort is efficient as the QRB is already partially-ordered (think slightly out-of-ordered). A portion of the QRB determined by a flush coefficient, _a_, of _q_ is flushed from the QRB. The remainder, (1-a)*q, is left in the QRB. The flush coefficient, _a_, is a value between 0 and 1. No value smaller than the new minimum value (from the remainder) in the QRB can be added. A new value of timestamp 1496337890 is inserted successfully as it is larger than the new minimum timestamp of 1496335840.
 
 ## Tritan Tables \(TrTables\)
 
