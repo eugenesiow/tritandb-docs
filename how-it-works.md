@@ -1,16 +1,72 @@
-> ### IoT Time-series workloads are different.
+# How TritanDB Works
+
+<!-- toc -->
+
+## IoT Time-series workloads are different {#workloads}
 
 _**Time-series workloads produced by streams from the Internet of Things \(IoT\) are different.**_ Time-series data is largely immutable. Writes primarily occur as new appends to recent time intervals, not as updates to existing rows. Both read and write workloads have a natural partitioning across both time and space. Hence, TritanDB utilises these properties to most efficiently store and process such IoT workloads.
 
-> #### Of the total potential economic value the IoT enables, interoperability is required for 40 percent on average and for nearly 60 percent in some settings. - [Unlocking the potential of the IoT, McKinsey](http://www.mckinsey.com/business-functions/digital-mckinsey/our-insights/the-internet-of-things-the-value-of-digitizing-the-physical-world)
+> Of the total potential economic value the IoT enables, interoperability is required for 40 percent on average and for nearly 60 percent in some settings. - [Unlocking the potential of the IoT, McKinsey](http://www.mckinsey.com/business-functions/digital-mckinsey/our-insights/the-internet-of-things-the-value-of-digitizing-the-physical-world)
 
 **Semantic interoperability is essential for achieving the economic and social impact of the IoT. **A rich model for representing metadata which contains the context of IoT time-series sensor data is required. Graph-based models are what almost every standards body and industry authority are working towards for representing metadata. TritanDB is built to support such rich models with the [Resource Description Framework \(RDF\)](https://www.w3.org/RDF/), state-of-the-art technology that drives the semantic web and machine-to-machine interoperability on the web.
-
-<!-- toc -->
 
 ## The Nature of Time-series IoT Data {#nature}
 
 The majority IoT time-series data is flat, wide, numerical and either approximately periodic or non-periodic.
+
+### Comparison of Flat and Complex Schema {#flat-complex}
+A flat schema in JSON, as shown below, is a schema with only a single level of attribute-value pairs.
+```json
+{
+    timestamp: 1501513833,
+    temperature: 32.0,
+    humidity: 10.5,
+    light: 120.0,
+    pressure: 28.0,
+    wind_speed: 10.5,
+    wind_direction: 0
+}
+```
+A complex schema in JSON, as shown below, has multiple nested levels of data within a tree-like, hierarchical structure.
+```json
+{
+    timestamp: 1501513833,
+    temperature: {
+       max: 22.0,
+       current: 17.0,
+       error : {
+    	   percent: 5.0
+       }
+    }
+}
+```
+### Width of Schema {#width}
+
+The width of a schema refers to the number of attributes it contains besides the timestamp attribute. The flat JSON schema below has a width of 6 because it has a set containing 6 attributes besides the timestamp: (_temperature, humidity, light, pressure, wind_speed, wind_direction_).
+```json
+{
+    timestamp: 1501513833,
+    temperature: 32.0,
+    humidity: 10.5,
+    light: 120.0,
+    pressure: 28.0,
+    wind_speed: 10.5,
+    wind_direction: 0
+}
+```
+ A schema is considered wide if the width is 2 or more. This definition borrows from the _tall versus wide_ schema design philosophy in big data key-value stores for time-series such as in BigTable and [HBase](http://hbase.apache.org/book.html\#casestudies.schema).
+ 
+### Data Types of Values within Schema {#value_type}
+
+The value from an attribute-value pair within a schema can assume varying data types.There are 3 basic JSON data types _Number, String_ and _Boolean_. The _String_ attribute-value pairs can be of various categories: numerical strings, boolean strings, identifiers with a Universally Unique Identifier (UUID) format, categorical strings and test data. A study of public IoT data found that a majority of attributes besides the timestamp were numerical (87.2%). Numerical attributes include integers, floating point numbers and time values. 
+
+### Periodicity of Streams {#period}
+
+One of the fundamental characteristics of data streams that form a time-series is how frequently and evenly the observations are spaced in time. The definition of periodicity used is from the Oxford English Dictionary and refers to 'the quality of regular recurrence', in particular, the tendency for data observations in a stream to 'recur at regular intervals'. This should not be confused with the definition of periodicity as seasonality in some data mining literature. A period is the interval between subsequent observations in a time-series and a periodic stream is defined as one with exactly regular timestamp intervals or in other words, a constant period, while a non-periodic stream has unevenly-spaced intervals or a varying period. A periodic stream has maximum periodicity while a non-periodic stream could have high or low periodicity.
+
+One of the differences between the Internet of Things and traditional wireless sensor networks is the potentially advantageous deployment of event-driven sensors within Things instead of sensors that record measurements at regular time intervals, determined by a constant sampling rate. For example, a smart light bulb that measures when a light is on can either send the signal only when the light changes state, i.e. is switched on or off, or send its state regularly every second. The former type of event-driven sensor gives rise to a non-periodic time series.
+
+It was discovered that public IoT data was mainly approximately periodic or non-periodic (approximately in a 50-50 ratio).
 
 ## Quantum Re-ordering Buffer \(QRB\) {#qrb}
 
@@ -23,6 +79,8 @@ For example, if a quantum, _q_, of 6 is defined, once 6 rows of the time-series 
 ## Tritan Tables \(TrTables\) {#trtables}
 
 Tritan Tables \(TrTables\) are a novel data structured for time-series storage inspired by Google's work on BigTable and Sorted String Tables \(SSTables\). Many big data systems like Apache Cassandra and HBase use SSTables organised as a Log Structured Merge Tree \(LSM-tree\) for key-value storage. A continuous compaction process helps manage these SSTables in terms of size and traversal performance. TrTables, however, do away with this background compaction process and LSM-tree design which adds unnecessary complication and can be expensive. Instead, TrTables, together with the QRB and a memtable in between, are designed as flat storage, which performs the fastest as it matches the physical design of modern storage. The interface to retrieve anything is physically one-dimensional, you provide an offset and you access a block of storage, hence, the flat TrTable, with a flat index, flat QRB and flat memtable works best and fastest.
+
+![](/assets/docs_tritandb_trtable - Page 1 (1).png)
 
 ## Time-series Compression {#ts-compress}
 
@@ -56,6 +114,8 @@ $$
 $$
 
 This adaptive coding adjusts $$k$$ based on the actual data to be encoded so no other information needs to be retrieved on the side for decoding. It also has a fast learning rate that chooses good, though not necessarily optimal, $$k$$ values and does not have the delay of forward adaptation methods. $$k$$ is adapted from 2 and 10 to 1 and 13 respectively in the above figure.
+
+## Value Compression {#value-compress}
 
 
 ## SPARQL Queries on S2SML Mappings {#s2sml}
