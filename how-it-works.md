@@ -51,7 +51,7 @@ $$
     \begin{cases}
       0, & k \to k-1 \\
       1, & \text{no change in } k \\
-      >1, & k \to k+q \\
+      >1, & k \to k+q
     \end{cases}
 $$
 

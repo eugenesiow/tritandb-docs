@@ -1,7 +1,7 @@
 {
-    "plugins": ["toc","katex"],
+    "plugins": ["toc-ng","katex"],
     "pluginsConfig": {
-        "toc": {
+        "toc-ng": {
             "addClass": true,
             "className": "toc"
         }
