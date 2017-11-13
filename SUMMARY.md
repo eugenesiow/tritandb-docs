@@ -6,4 +6,6 @@
 * [Appendix](appendix/appendix.md)
   * [S2SML](appendix/s2sml.md)
   * [Protocol Buffers Format](appendix/protobuf.md)
+* [Extending TritanDB](extensions/README.md)
+
 
