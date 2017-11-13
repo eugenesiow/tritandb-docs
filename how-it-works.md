@@ -46,14 +46,14 @@ $$\epsilon$$ is a 1 to 4 bit variable-length binary value that indicates the nex
 
 This proposal for Delta-RLE-Rice compression is inspired by the backward adaptation strategy from [Malvar (2006)](#references) for the run-length encoding method initially proposed by [Rice and Plaunt (1971)](#references). The backward adaptation strategy succeeds by tuning a $$k$$ parameter which allows the adaptive compression of timestamps and run-lengths of varying precision and periodicity respectively. Rice coding divides a value, $$u$$, into two parts based on $$k$$, giving a quotient $$q =\left \lfloor{u/2^{k}}\right \rfloor $$ and the remainder, $$r = u\%2^{k}$$. The quotient, $$q$$ is stored in unary coding, for example, the $$\Delta$$ value '3602' with a $$k$$ of 10 has a quotient of 3 and is stored as '1110'. The remainder, $$r$$, is binary coded in $$k$$ bits. Initial $$k$$ values of 2 and 10 are used in this example in the above figure and are adaptively tuned based on the previous value in the sequence so this can be reproduced during decoding. Three rules govern the tuning based on the value of $$q$$, allowing quick convergence on good $$k$$ values.
 
-{% math %}
+$$
    \text{if } q=
     \begin{cases}
       0, & k \to k-1 \\
       1, & \text{no change in } k \\
-      \textgreater1, & k \to k+q \\
+      \text{>}1, & k \to k+q \\
     \end{cases}
-{% endblock %}
+$$
 
 This adaptive coding adjusts $$k$$ based on the actual data to be encoded so no other information needs to be retrieved on the side for decoding. It also has a fast learning rate that chooses good, though not necessarily optimal, $$k$$ values and does not have the delay of forward adaptation methods. $$k$$ is adapted from 2 and 10 to 1 and 13 respectively in the above figure.
 
