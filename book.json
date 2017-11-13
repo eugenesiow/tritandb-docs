@@ -1,12 +1,9 @@
 {
-    "plugins": ["toc","mathjax"],
+    "plugins": ["toc","katex"],
     "pluginsConfig": {
         "toc": {
             "addClass": true,
             "className": "toc"
-        },
-        "mathjax":{
-            "forceSVG": true
         }
     }
 }
