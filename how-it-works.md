@@ -6,6 +6,8 @@ _**Time-series workloads produced by streams from the Internet of Things \(IoT\)
 
 **Semantic interoperability is essential for achieving the economic and social impact of the IoT. **A rich model for representing metadata which contains the context of IoT time-series sensor data is required. Graph-based models are what almost every standards body and industry authority are working towards for representing metadata. TritanDB is built to support such rich models with the [Resource Description Framework \(RDF\)](https://www.w3.org/RDF/), state-of-the-art technology that drives the semantic web and machine-to-machine interoperability on the web.
 
+<!-- toc -->
+
 ## The Nature of Time-series IoT Data
 
 The majority IoT time-series data is flat, wide, numerical and either approximately periodic or non-periodic.
