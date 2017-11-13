@@ -53,7 +53,7 @@ This proposal for Delta-RLE-Rice compression is inspired by the backward adaptat
       1, & \text{no change in } k \\
       \textgreater1, & k \to k+q \\
     \end{cases}
-{% endmath %}
+{% endblock %}
 
 This adaptive coding adjusts $$k$$ based on the actual data to be encoded so no other information needs to be retrieved on the side for decoding. It also has a fast learning rate that chooses good, though not necessarily optimal, $$k$$ values and does not have the delay of forward adaptation methods. $$k$$ is adapted from 2 and 10 to 1 and 13 respectively in the above figure.
 
