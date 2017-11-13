@@ -80,7 +80,7 @@ For example, if a quantum, _q_, of 6 is defined, once 6 rows of the time-series 
 
 Tritan Tables \(TrTables\) are a novel data structured for time-series storage inspired by Google's work on BigTable and Sorted String Tables \(SSTables\). Many big data systems like Apache Cassandra and HBase use SSTables organised as a Log Structured Merge Tree \(LSM-tree\) for key-value storage. A continuous compaction process helps manage these SSTables in terms of size and traversal performance. TrTables, however, do away with this background compaction process and LSM-tree design which adds unnecessary complication and can be expensive. Instead, TrTables, together with the QRB and a memtable in between, are designed as flat storage, which performs the fastest as it matches the physical design of modern storage. The interface to retrieve anything is physically one-dimensional, you provide an offset and you access a block of storage, hence, the flat TrTable, with a flat index, flat QRB and flat memtable works best and fastest.
 
-![](/assets/docs_tritandb_trtable - Page 1 (1).png)
+![](/assets/docs_tritandb_trtable - Page 1.png)
 
 ## Time-series Compression {#ts-compress}
 
