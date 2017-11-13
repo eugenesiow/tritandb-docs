@@ -38,9 +38,22 @@ TritanDB utilises the best algorithms for different precisions of timestamps. Ti
 
 #### Delta-of-Delta Timestamp Compression (High Precision)
 
-Delta-of-Delta compression builds on the technique for compressing timestamps introduced by [Pelkonen et al. (2015)](#References) to support effective compression on varying timestamp precision. The header stores a full starting timestamp for the block in 64 bits and the next length of bits depends on the timespan of a block and the precision of the timestamps. In the example in the figure above, a 24 bit length is used to store the timestamp delta of '3602'. The 24 bit length is derived for a 4 hour block at millisecond precision with the first delta assumed to be positive. For the same 4 hour block, if the precision of timestamps during ingestion is determined to be in seconds a 14 bits length is calculated and used, while this length is 24 bits for millisecond precision and 44 bits for nanoseconds precision. 
+Delta-of-Delta compression builds on the technique for compressing timestamps introduced by [Pelkonen et al. (2015)](#references) to support effective compression on varying timestamp precision. The header stores a full starting timestamp for the block in 64 bits and the next length of bits depends on the timespan of a block and the precision of the timestamps. In the example in the figure above, a 24 bit length is used to store the timestamp delta of '3602'. The 24 bit length is derived for a 4 hour block at millisecond precision with the first delta assumed to be positive. For the same 4 hour block, if the precision of timestamps during ingestion is determined to be in seconds a 14 bits length is calculated and used, while this length is 24 bits for millisecond precision and 44 bits for nanoseconds precision. 
 
-$$\epsilon$$ is a 1 to 4 bit variable-length binary value that indicates the next number of bits to read for the first delta-of-delta value. '0' means the delta-of-delta ($$\Delta\Delta$$) is 0, while '10' means read the next 7 bits as the value is between '-63' and '64' (range of $$2^{7}$$), '110' the next 24 bits, '1110' the next 32 bits. Finally, an $$\epsilon$$ of '1111' means reading a 64 bit $$\Delta\Delta$$. The example follows with $\Delta\Delta$s of '-2' and '0' stored in just 10 bits which reflect the delta of the next two timestamps is '3600'. These lengths are adapted from the empirical measurement of the distribution of $$\Delta\Delta$$ values from the Pelkonen et al. (2015) paper.
+$$\epsilon$$ is a 1 to 4 bit variable-length binary value that indicates the next number of bits to read for the first delta-of-delta value. '0' means the delta-of-delta ($$\Delta\Delta$$) is 0, while '10' means read the next 7 bits as the value is between '-63' and '64' (range of $$2^{7}$$), '110' the next 24 bits, '1110' the next 32 bits. Finally, an $$\epsilon$$ of '1111' means reading a 64 bit $$\Delta\Delta$$. The example follows with $$\Delta\Delta$$s of '-2' and '0' stored in just 10 bits which reflect the delta of the next two timestamps is '3600'. These lengths are adapted from the empirical measurement of the distribution of $$\Delta\Delta$$ values from the [Pelkonen et al. (2015)](#references) paper.
+
+#### Delta-RLE-Rice Compression (Low Precision)
+
+This proposal for Delta-RLE-Rice compression is inspired by the backward adaptation strategy from [Malvar (2006)](#references) for the run-length encoding method initially proposed by [Rice and Plaunt (1971)](#references). The backward adaptation strategy succeeds by tuning a $$k$$ parameter which allows the adaptive compression of timestamps and run-lengths of varying precision and periodicity respectively. Rice coding divides a value, $$u$$, into two parts based on $$k$$, giving a quotient $$q =\left \lfloor{u/2^{k}}\right \rfloor $$ and the remainder, $$r = u\%2^{k}$$. The quotient, $$q$$ is stored in unary coding, for example, the $$\Delta$$ value '3602' with a $$k$$ of 10 has a quotient of 3 and is stored as '1110'. The remainder, $$r$$, is binary coded in $$k$$ bits. Initial $$k$$ values of 2 and 10 are used in this example in the above figure and are adaptively tuned based on the previous value in the sequence so this can be reproduced during decoding. Three rules govern the tuning based on the value of $$q$$, allowing quick convergence on good $$k$$ values.
+{% math %}
+    \text{if } q=
+    \begin{cases}
+      0, & k \to k-1 \\
+      1, & \text{no change in } k \\
+      \textgreater1, & k \to k+q 
+    \end{cases}
+{% endmath %}
+This adaptive coding adjusts $$k$$ based on the actual data to be encoded so no other information needs to be retrieved on the side for decoding. It also has a fast learning rate that chooses good, though not necessarily optimal, $$k$$ values and does not have the delay of forward adaptation methods. $$k$$ is adapted from 2 and 10 to 1 and 13 respectively in the above figure.
 
 
 ## SPARQL Queries on S2SML Mappings
@@ -49,4 +62,8 @@ SPARQL is a powerful query language for RDF graphs which is similar in terms of 
 
 ## References
 
-Tuomas Pelkonen, Scott Franklin, Justin Teller, Paul Cavallaro, Qi Huang, Justin Meza, and Kaushik Veeraraghavan. Gorilla: A Fast, Scalable, In-Memory Time Series Database. _In Proceedings of the 41st International Conference on Very Large Data Bases, 2015_
+Tuomas Pelkonen, Scott Franklin, Justin Teller, Paul Cavallaro, Qi Huang, Justin Meza, and Kaushik Veeraraghavan. [Gorilla: A Fast, Scalable, In-Memory Time Series Database](http://www.vldb.org/pvldb/vol8/p1816-teller.pdf). _In Proceedings of the 41st International Conference on Very Large Data Bases, 2015_
+
+Henrique S Malvar. [Adaptive Run-Length / Golomb-Rice Encoding of Quantized Generalized Gaussian Sources with Unknown Statistics](http://ieeexplore.ieee.org/document/1607237/). _In Proceedings of the Data Com- pression Conference, 2006_
+
+Robert Rice and James Plaunt. [Adaptive Variable-Length Coding for Efficient Compression of Spacecraft Television Data](http://ieeexplore.ieee.org/document/1090789/). _IEEE Transactions on Communications, 19 (6):889897, dec 1971._
