@@ -7,5 +7,7 @@
   * [S2SML](appendix/s2sml.md)
   * [Protocol Buffers Format](appendix/protobuf.md)
 * [Extending TritanDB](extensions/README.md)
+  * [Architecture](extensions/architecture.md)
+  * [SWIBRE](extensions/swibre.md)
 
 
