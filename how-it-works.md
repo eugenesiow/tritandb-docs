@@ -82,6 +82,8 @@ Tritan Tables \(TrTables\) are a novel data structured for time-series storage i
 
 ![](/assets/docs_tritandb_trtable - Page 1.png)
 
+In the above figure, the memtable consists of an index entry, $$i$$, that stores values of the block timestamp, current TrTable offset and average, maximum, minimum and counts of the row data which are updated when elements from the QRB are inserted. It also stores a block entry, $$b$$, which contains the current compressed time-partitioned block data. The memtable gets flushed to a TrTable file once it reaches the time-partitioned block size, $$b_{size}$$. Each time-series has a memtable and corresponding TrTable file on-disk.
+
 ## Time-series Compression {#ts-compress}
 
 Time-series can often be compressed very effectively. The difference between timestamps, the delta, is much smaller than the actual timestamp. Values from sensors are unlikely to fluctuate greatly all the time. Hence, by compressing timestamps and values with reference to the previous sequence of values is advantageous because it is faster to compress and decompress (in terms of disk and memory input-output) a smaller chunk than to store and retrieve a bigger uncompressed chunk (and the pace and improvement of CPU speeds have outstripped that of memory and disk latency).
@@ -117,6 +119,18 @@ This adaptive coding adjusts $$k$$ based on the actual data to be encoded so no 
 
 ## Value Compression {#value-compress}
 
+Value compression, for speed, does not use predictors ([Burtscher and Ratanaworabhan's (2009)](#references) FPC) and instead compares the current value to only the previous value for speed, as detailed in the paper by [Pelkonen et al. (2015)](#references). After an XOR operation between the values, the result, $$r$$, is stored according to the output from a function _gor()_ described as follows, where '$$.$$' is an operator that appends bits together, $$p$$ is the previous XOR value, _lead()_ and _trail()_ return the number of leading and trailing zeroes respectively, _len()_ returns the length in bits and $$n$$ is the number of meaningful bits remaining within the value.
+
+$$
+    gor(r)=
+    \begin{cases}
+      '0', & \text{if } r = 0 \\
+      '10'.n, & \text{if } lead(r) >= lead(p) \text{ and } trail(r) = trail(p)\\
+      '11'.l.m.n, & \text{else, where } l = lead(r) \text{ and } m = len(n)
+    \end{cases}
+$$
+  
+The algorithm was designed for the fast encoding and decoding of blocks of time-series data as there is no condition within the _gor(r)_ function to reduce the number of significant bits stored in the sequence but only to increase them. However, each block resets the counter on significant bits and 'localises' the compression. 
 
 ## SPARQL Queries on S2SML Mappings {#s2sml}
 
@@ -129,3 +143,5 @@ Tuomas Pelkonen, Scott Franklin, Justin Teller, Paul Cavallaro, Qi Huang, Justin
 Henrique S Malvar. [Adaptive Run-Length / Golomb-Rice Encoding of Quantized Generalized Gaussian Sources with Unknown Statistics](http://ieeexplore.ieee.org/document/1607237/). _In Proceedings of the Data Com- pression Conference, 2006_
 
 Robert Rice and James Plaunt. [Adaptive Variable-Length Coding for Efficient Compression of Spacecraft Television Data](http://ieeexplore.ieee.org/document/1090789/). _IEEE Transactions on Communications, 19 (6):889897, dec 1971._
+
+Martin Burtscher and Paruj Ratanaworabhan. [FPC: A High-Speed Compressor for Double-Precision Floating-Point Data](http://ieeexplore.ieee.org/document/4589203/). _IEEE Transactions on Computers, 58(1):18 31, jan 2009._
