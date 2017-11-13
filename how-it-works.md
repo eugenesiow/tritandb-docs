@@ -51,7 +51,7 @@ This proposal for Delta-RLE-Rice compression is inspired by the backward adaptat
     \begin{cases}
       0, & k \to k-1 \\
       1, & \text{no change in } k \\
-      \textgreater1, & k \to k+q 
+      \textgreater1, & k \to k+q \\
     \end{cases}
 {% endmath %}
 
