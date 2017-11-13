@@ -134,7 +134,7 @@ The algorithm was designed for the fast encoding and decoding of blocks of time-
 
 ## SPARQL Queries on S2SML Mappings {#s2sml}
 
-SPARQL is a powerful query language for RDF graphs which is similar in terms of syntax to SQL but allows the querying of subgraph patterns. Time-series data is stored in the most compact and concise means with TrTables while metadata and other graph structures and relations are stored in an in-memory graph model represented in RDF with S2SML.
+SPARQL is a powerful query language for RDF graphs which is similar in terms of syntax to SQL but allows the querying of subgraph patterns. Time-series data is stored in the most compact and concise means with TrTables while metadata and other graph structures and relations are stored in an in-memory graph model represented in RDF with [S2SML](appendix/s2sml.md).
 
 ## References {#references}
 

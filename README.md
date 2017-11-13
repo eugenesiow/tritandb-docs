@@ -16,5 +16,11 @@
 
 ## Getting Started
 
+- Find out [how it works](how-it-works.md) and why it makes storing streams of IoT time-series data fast and interoperable.
+- [Get it!](#get-it)
+- Get the [command line interface](command-line-interface.md) to start using it.
+
+## Get It! {#get-it}
+
 TritanDB is available from Github \([https://github.com/eugenesiow/tritandb-kt](https://github.com/eugenesiow/tritandb-kt)\).
 
