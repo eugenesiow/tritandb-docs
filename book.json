@@ -4,6 +4,9 @@
         "toc": {
             "addClass": true,
             "className": "toc"
+        },
+        "mathjax":{
+            "forceSVG": true
         }
     }
 }
