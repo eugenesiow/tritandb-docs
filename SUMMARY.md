@@ -9,5 +9,6 @@
 * [Extending TritanDB](extensions/README.md)
   * [Architecture](extensions/architecture.md)
   * [SWIBRE](extensions/swibre.md)
+  * [SWIPE](extensions/swipe.md)
 
 
